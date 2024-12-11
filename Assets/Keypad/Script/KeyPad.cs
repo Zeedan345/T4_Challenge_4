@@ -1,23 +1,15 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class KeypadManager : MonoBehaviour
 {
-    public string correctCode = "1234"; // Set your desired combination
+    public string correctCode = "1234";
     private string enteredCode = "";
 
-    public Text displayText; // Reference to the Text field displaying entered numbers
-    public GameObject door; // Reference to the door GameObject
+    public TextMeshProUGUI displayText; // For UI display in case you want to show entered numbers
 
-    private Animator doorAnimator;
-
-    void Start()
-    {
-        doorAnimator = door.GetComponent<Animator>();
-        ClearDisplay();
-    }
-
-    // Called when a button is pressed
+    // Adds a digit to the entered code
     public void AddDigit(string digit)
     {
         if (enteredCode.Length < correctCode.Length)
@@ -27,50 +19,34 @@ public class KeypadManager : MonoBehaviour
         }
     }
 
-    // Called when the "Enter" button is pressed
+    // Checks if the entered code matches the correct code
     public void CheckCode()
     {
         if (enteredCode == correctCode)
         {
-            OpenDoor();
+            Debug.Log("Correct code! Door opens.");
+            // Add your door-opening logic here
         }
         else
         {
-            Debug.Log("Incorrect Code!");
-            ClearDisplay();
+            Debug.Log("Incorrect code!");
+            ClearCode();
         }
     }
 
-    // Clears the entered code and updates the display
+    // Clears the entered code
     public void ClearCode()
     {
-        enteredCode = ""; // Reset the entered code
-        UpdateDisplay();  // Update the display to show an empty string
-        Debug.Log("Code cleared!");
+        enteredCode = "";
+        UpdateDisplay();
     }
 
-
-    // Opens the door
-    private void OpenDoor()
-    {
-        if (doorAnimator != null)
-        {
-            doorAnimator.SetTrigger("Open");
-        }
-        Debug.Log("Door Opened!");
-    }
-
-    // Updates the UI display
+    // Updates the display (optional)
     private void UpdateDisplay()
     {
-        displayText.text = enteredCode;
-    }
-
-    // Clears the UI display
-    private void ClearDisplay()
-    {
-        enteredCode = "";
-        displayText.text = "";
+        if (displayText != null)
+        {
+            displayText.text = enteredCode;
+        }
     }
 }
-
