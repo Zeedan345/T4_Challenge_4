@@ -7,11 +7,7 @@ public class LockButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Detect controller or hand interaction
-        if (other.CompareTag("Controller") || other.CompareTag("Hand"))
-        {
-            keypadManager.AddDigit(digit); // Add the digit to the code
-            Debug.Log($"Button {digit} pressed!");
-        }
+        keypadManager.AddDigit(digit);
+        Debug.Log($"Button {digit} pressed!");
     }
 }
