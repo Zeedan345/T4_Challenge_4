@@ -1,52 +1,80 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; // Include if using regular UI Text
+using TMPro; // Include if using TextMeshPro
 
 public class KeypadManager : MonoBehaviour
 {
-    public string correctCode = "1234";
+    public string correctCode = "123"; // The correct code to unlock
     private string enteredCode = "";
 
-    public TextMeshProUGUI displayText; // For UI display in case you want to show entered numbers
+    // Reference to the UI Text or TextMeshPro component
+    public Text displayText; // For Unity UI Text
+    // public TextMeshProUGUI displayText; // Uncomment if using TextMeshPro
 
-    // Adds a digit to the entered code
+    // Reference for teleportation
+    public Transform teleportDestination; // Set the destination Transform
+    public GameObject player; // The player GameObject to teleport
+
     public void AddDigit(string digit)
     {
-        if (enteredCode.Length < correctCode.Length)
+        if (enteredCode.Length < 3) // Allow only 3 digits
         {
             enteredCode += digit;
             UpdateDisplay();
+
+            if (enteredCode.Length == 3) // Reset after 3 digits
+            {
+                CheckCode();
+            }
         }
     }
 
-    // Checks if the entered code matches the correct code
     public void CheckCode()
     {
         if (enteredCode == correctCode)
         {
-            Debug.Log("Correct code! Door opens.");
-            // Add your door-opening logic here
+            Debug.Log("Correct code entered! Teleporting player...");
+            TeleportPlayer();
         }
         else
         {
-            Debug.Log("Incorrect code!");
-            ClearCode();
+            Debug.Log("Incorrect code! Resetting...");
+            ResetCode();
         }
     }
 
-    // Clears the entered code
     public void ClearCode()
+    {
+        Debug.Log("Code cleared manually.");
+        ResetCode();
+    }
+
+    private void ResetCode()
     {
         enteredCode = "";
         UpdateDisplay();
     }
 
-    // Updates the display (optional)
     private void UpdateDisplay()
     {
         if (displayText != null)
         {
-            displayText.text = enteredCode;
+            displayText.text = enteredCode; // Update the displayed text
         }
+    }
+
+    private void TeleportPlayer()
+    {
+        if (player != null && teleportDestination != null)
+        {
+            player.transform.position = teleportDestination.position;
+            Debug.Log("Player teleported to destination.");
+        }
+        else
+        {
+            Debug.LogWarning("Player or Teleport Destination is not set!");
+        }
+
+        ResetCode(); // Reset the keypad after teleporting
     }
 }
